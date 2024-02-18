@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.Scanner;
 
 record  Place(String name, int distance) {
     @Override
@@ -22,6 +23,65 @@ public class linkedListChallange {
         placesToVisit.addFirst(new Place("Sydney", 0));
         System.out.println(placesToVisit);
 
+        var iterator = placesToVisit.listIterator();
+        Scanner scanner = new Scanner(System.in);
+        boolean quitLoop = false;
+        boolean forward = true;
+
+        printMenu();
+        while (!quitLoop) {
+            if (!iterator.hasPrevious()) {
+                System.out.println("Originating: " + iterator.next());
+                forward = true;
+            }
+            if (!iterator.hasNext()) {
+                System.out.println("Final: " + iterator.previous());
+                forward = false;
+            }
+            System.out.println("Enter Value: ");
+            String menuItem = scanner.nextLine().toUpperCase().substring(0,1);
+
+            switch (menuItem) {
+                case "F":
+                    System.out.println("User wants to go forward");
+                    if (!forward) {  // Reversing direction
+                        forward = true;
+                        if (iterator.hasNext()) {
+                            iterator.next(); // Adjust position forward
+                        }
+                    }
+                    if (iterator.hasNext()) {
+                        System.out.println(iterator.next());
+                    }
+                    break;
+
+                case "B":
+                    System.out.println("User wants to go backwards");
+                    if (forward) {  // Reversing direction
+                        forward = false;
+                        if (iterator.hasPrevious()) {
+                            iterator.previous(); // Adjust position forward
+                        }
+                    }
+                    if (iterator.hasPrevious()) {
+                        System.out.println(iterator.previous());
+                    }
+                    break;
+
+                case "M":
+                    printMenu();
+                    break;
+
+                case "L":
+                    System.out.println(placesToVisit);
+                    break;
+
+                default:
+                    quitLoop = true;
+                    break;
+            }
+        }
+
     }
     private static void addPlace(LinkedList<Place> list, Place place) {
         if (list.contains(place)) {
@@ -42,5 +102,14 @@ public class linkedListChallange {
             matchedindex++;
         }
         list.add(place);
+    }
+    private static void printMenu() {
+        System.out.println("""
+                Available actions (select word or letter):
+                (F)orward
+                (B)ackwards
+                (L)ist Places
+                (M)enu
+                (Q)uit""");
     }
 }
